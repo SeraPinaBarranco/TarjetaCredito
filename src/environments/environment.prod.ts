@@ -7,6 +7,5 @@ export const environment = {
     storageBucket: "tarjetacredito-ca2cd.appspot.com",
     messagingSenderId: "178341310158",
     appId: "1:178341310158:web:c2187ab2420146aaa76a9f"
-
   }
 };

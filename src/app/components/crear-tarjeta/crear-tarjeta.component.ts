@@ -12,7 +12,7 @@ export class CrearTarjetaComponent implements OnInit {
 
   form: FormGroup;
 
-  constructor(private fb: FormBuilder, private _tarjetaService: TarjetaService) { 
+  constructor(private fb: FormBuilder, private _tarjetaService: TarjetaService) {
     this.form = fb.group({
       titular: ['',Validators.required],
       numeroTarjeta: ['',[Validators.required, Validators.minLength(16), Validators.maxLength(16)]],
