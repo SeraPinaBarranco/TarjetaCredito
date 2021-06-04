@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "tarjetacredito-ca2cd": {
+      "hosting": {
+        "TarjetaCredito": [
+          "tarjetacredito-ca2cd"
+        ]
+      }
+    }
+  }
+}
