@@ -4,37 +4,23 @@
 
         <table class="table">
             <tbody>
-                <tr>
+                <tr *ngFor="let tarjeta of listTarjetas">
                     <td>
-                        Tomas
+                        {{tarjeta.titular}}
                     </td>
                     <td>
-                        1412343431
+                        {{tarjeta.numeroTarjeta}}
                     </td>
                     <td>
-                        14/12
+                        {{tarjeta.fechaExpiracion}}                        
                     </td>
                     <td>
-                        <i class="far fa-edit text-info"></i>
-                        <i class="far fa-trash-alt text-danger"></i>
+                        <i (click)="editarTarjeta(tarjeta)" class="far fa-edit text-info"></i>
+                        <i (click)="eliminarTarjeta(tarjeta.id)" class="far fa-trash-alt text-danger"></i>
                     </td>                    
                 </tr>
 
-                <tr>
-                    <td>
-                        Paco
-                    </td>
-                    <td>
-                        425452454251
-                    </td>
-                    <td>
-                        13/12
-                    </td>
-                    <td>
-                        <i class="far fa-edit text-info"></i>
-                        <i class="far fa-trash-alt text-danger"></i>
-                    </td>                    
-                </tr>
+                
             </tbody>
         </table>
 

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+
 import { ToastrService } from 'ngx-toastr';
 
 import { TarjetaCredito } from 'src/app/models/TarjetaCredito';
@@ -13,6 +14,9 @@ import { TarjetaService } from 'src/app/services/tarjeta.service';
 export class CrearTarjetaComponent implements OnInit {
 
   form: FormGroup;
+  loading= false;
+  titulo="Agregar tarjeta";
+  id: string|undefined;
 
   constructor(private fb: FormBuilder, private _tarjetaService: TarjetaService,
               private toastr: ToastrService) {
@@ -25,10 +29,53 @@ export class CrearTarjetaComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {  }
+  ngOnInit(): void { 
+    this._tarjetaService.getTarjetaEdit().subscribe(data=>{
+      this.id= data.id;
+      this.titulo="editar tarjeta";
+      this.form.patchValue({
+        titular:data.titular,
+        numeroTarjeta:data.numeroTarjeta,
+        fechaExpiracion: data.fechaExpiracion,
+        ccv:data.ccv
+      });
+    })
+   }
 
-  crearTarjeta( ){   
+  guardarTarjeta( ){  
     
+    if(this.id === undefined){
+      //Crear nueva tarjeta
+      this.agregarTarjeta();
+    }else{
+      //Editar nueva tarjeta
+      this.editarTarjeta(this.id);
+    }
+    
+  }
+  editarTarjeta(id: string) {
+    const TARJETA: any={
+      titular: this.form.value.titular,
+      numeroTarjeta: this.form.value.numeroTarjeta,
+      fechaExpiracion: this.form.value.fechaExpiracion,
+      ccv: this.form.value.ccv,
+      //fechaCreacion: new Date(),
+      fechaActualizacion: new Date()
+    };
+
+    this.loading=true;
+    this._tarjetaService.editarTarjeta(id, TARJETA).then( () => {
+      this.loading=false;
+      this.titulo="crear tarjeta";
+      this.form.reset();
+      this.id= undefined;
+      this.toastr.info("Tarjeta actualizada","Registro de tarjetas");
+    },error =>{
+      console.log(error);
+    }  );
+  }
+  
+  agregarTarjeta(){
     const TARJETA: TarjetaCredito={
       titular: this.form.value.titular,
       numeroTarjeta: this.form.value.numeroTarjeta,
@@ -37,16 +84,19 @@ export class CrearTarjetaComponent implements OnInit {
       fechaCreacion: new Date(),
       fechaActualizacion: new Date()
     };
-
-    //console.log(TARJETA);
+  
+    this.loading=true;
+  
     this._tarjetaService.guardarTarjeta(TARJETA).then(()=> {
-      console.log('tarjeta registrada');
+      this.loading=false;
+      this.toastr.success("Tarjeta registrada correctamente","Registro de tarjeta");
       this.form.reset();
     },error=>{
+      this.loading=false;
+      this.toastr.error("Ooops...ocurrió un error",error);
       console.log(error);
     });
 
-    
   }
 
 }
